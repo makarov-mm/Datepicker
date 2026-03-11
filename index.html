@@ -56,7 +56,20 @@
 
                     $('.datepicker-window').remove();
                     var datepicker = createDatepicker(function (date) {
-                        $('#inner').val(date.getFullYear() + ' / ' + date.getMonth() + ' / ' + date.getDate());
+                        let d = '' + date.getDate();
+
+                        if (d.length < 2) {
+                            d = '0' + d;
+                        }
+
+                        let m = '' + date.getMonth();
+
+                        if (m.length < 2) {
+                            m = '0' + m;
+                        }
+
+                        let y = date.getFullYear();
+                        $('#inner').val(`${d}.${m}.${y}`);
                     });
                     $('body').append(datepicker);
                     datepicker

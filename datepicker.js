@@ -37,7 +37,7 @@ function nextMonth(datepicker) {
 }
 
 function numberToMonth(num) {
-    return ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь', 'Июль', 'Август', 'Сентябрь', 'Октябрь', 'Ноябрь', 'Декабрь'][num];
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'][num];
 }
 
 function getYear(datepicker) {
@@ -57,28 +57,31 @@ function getDate(datepicker) {
 }
 
 function rebuildDatepicker(datepicker) {
-    var header = datepicker.find('.datepicker-window-header');
+    const header = datepicker.find('.datepicker-window-header');
     header.find('span').text(numberToMonth(getMonth(datepicker)) + ' ' + getYear(datepicker));
 
-    var daysTable = datepicker.find('.datepicker-window-table');
+    const daysTable = datepicker.find('.datepicker-window-table');
     daysTable.empty();
+
     if (daysTable.length) {
-        var date = new Date(getYear(datepicker), getMonth(datepicker), 1);
-        var daysCount = date.getDaysInMonth();
-        var dayOfWeek = date.getDay() - 1;
+        const date = new Date(getYear(datepicker), getMonth(datepicker), 1);
+        const daysCount = date.getDaysInMonth();
+        let dayOfWeek = date.getDay() - 1;
+
         if (dayOfWeek < 0) {
             dayOfWeek = 6;
         }
-        var offset = dayOfWeek;
-        var done = false;
+
+        let offset = dayOfWeek;
+        let done = false;
 
         for (j = 0; !done; ++j) {
-            var monthDaysTableRow = $(document.createElement('tr'));
+            const monthDaysTableRow = $(document.createElement('tr'));
             daysTable.append(monthDaysTableRow);
 
             for (i = 0; i < 7; ++i) {
-                var d = i + j * 7 + 1 - dayOfWeek;
-                var column = $(document.createElement('td'))
+                const d = i + j * 7 + 1 - dayOfWeek;
+                const column = $(document.createElement('td'))
                     .text(d <= daysCount && offset-- <= 0 ? d : '');
 
                 (function (d) {
@@ -138,38 +141,38 @@ function setDate(datepicker, year, month, day) {
     rebuildDatepicker(datepicker);
 }
 
-var dpCallback;
+let dpCallback;
 
 function createDatepicker(callback) {
     dpCallback = callback;
 
-    var window = $(document.createElement('div'))
+    const window = $(document.createElement('div'))
         .addClass('datepicker-window');
 
     // hidden fields
 
-    var hiddenDay = $(document.createElement('input'))
+    const hiddenDay = $(document.createElement('input'))
         .attr('type', 'hidden')
         .attr('name', 'day');
     window.append(hiddenDay);
 
-    var hiddenMonth = $(document.createElement('input'))
+    const hiddenMonth = $(document.createElement('input'))
         .attr('type', 'hidden')
         .attr('name', 'month');
     window.append(hiddenMonth);
 
-    var hiddenYear = $(document.createElement('input'))
+    const hiddenYear = $(document.createElement('input'))
         .attr('type', 'hidden')
         .attr('name', 'year');
     window.append(hiddenYear);
 
     // header
 
-    var header = $(document.createElement('div'))
+    const header = $(document.createElement('div'))
         .addClass('datepicker-window-header');
     window.append(header);
 
-    var prevMonthButton = $(document.createElement('a'))
+    const prevMonthButton = $(document.createElement('a'))
         .attr('href', '/')
         .click(function (e) {
             e.stopPropagation();
@@ -178,10 +181,10 @@ function createDatepicker(callback) {
         });
     header.append(prevMonthButton);
 
-    var title = $(document.createElement('span'));
+    const title = $(document.createElement('span'));
     header.append(title);
 
-    var nextMothButton = $(document.createElement('a'))
+    const nextMothButton = $(document.createElement('a'))
         .attr('href', '/')
         .click(function (e) {
             e.stopPropagation();
@@ -191,26 +194,26 @@ function createDatepicker(callback) {
     header.append(nextMothButton);
 
     // set current date
-    var today = new Date();
+    const today = new Date();
     setDate(window, today.getFullYear(), today.getMonth(), today.getDate());
 
     // week days table
 
-    var daysTable = $(document.createElement('table'))
+    const daysTable = $(document.createElement('table'))
         .addClass('datepicker-window-days');
     window.append(daysTable);
 
-    var daysTableRow = $(document.createElement('tr'));
+    const daysTableRow = $(document.createElement('tr'));
     daysTable.append(daysTableRow);
-    _.each(['Пн', 'Вт', 'Ср', 'Чт', 'Пт', 'Сб', 'Вс'], function (day) {
-        var daysTableColumn = $(document.createElement('td'))
+    _.each(['Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa', 'Su'], function (day) {
+        const daysTableColumn = $(document.createElement('td'))
             .text(day);
         daysTableRow.append(daysTableColumn);
     });
 
     // month days table
 
-    var monthDaysTable = $(document.createElement('table'))
+    const monthDaysTable = $(document.createElement('table'))
         .addClass('datepicker-window-table');
     window.append(monthDaysTable);
 
