@@ -4,7 +4,7 @@
 };
 
 Date.prototype.getDaysInMonth = function () {
-    return arguments.callee[this.isLeapYear() ? 'L' : 'R'][this.getMonth()];
+    return Date.prototype.getDaysInMonth[this.isLeapYear() ? 'L' : 'R'][this.getMonth()];
 };
 
 Date.prototype.getDaysInMonth.R = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
@@ -41,15 +41,15 @@ function numberToMonth(num) {
 }
 
 function getYear(datepicker) {
-    return parseInt(datepicker.find('input[type=hidden][name=year]').val());
+    return parseInt(datepicker.find('input[type=hidden][name=year]').val(), 10);
 }
 
 function getMonth(datepicker) {
-    return parseInt(datepicker.find('input[type=hidden][name=month]').val());
+    return parseInt(datepicker.find('input[type=hidden][name=month]').val(), 10);
 }
 
 function getDay(datepicker) {
-    return parseInt(datepicker.find('input[type=hidden][name=day]').val());
+    return parseInt(datepicker.find('input[type=hidden][name=day]').val(), 10);
 }
 
 function getDate(datepicker) {
@@ -75,11 +75,11 @@ function rebuildDatepicker(datepicker) {
         let offset = dayOfWeek;
         let done = false;
 
-        for (j = 0; !done; ++j) {
+        for (let j = 0; !done; ++j) {
             const monthDaysTableRow = $(document.createElement('tr'));
             daysTable.append(monthDaysTableRow);
 
-            for (i = 0; i < 7; ++i) {
+            for (let i = 0; i < 7; ++i) {
                 const d = i + j * 7 + 1 - dayOfWeek;
                 const column = $(document.createElement('td'))
                     .text(d <= daysCount && offset-- <= 0 ? d : '');
@@ -91,12 +91,12 @@ function rebuildDatepicker(datepicker) {
                             .click(function () {
                                 setDay(datepicker, d, true);
                                 dpCallback && dpCallback(getDate(datepicker));
-                                $(this).parent().parent().parent().parent().remove();
+                                $(this).closest('.datepicker-window').remove();
                             });
                     }
                 })(d);
 
-                if (getDay(datepicker) == d && new Date().getFullYear() == getYear(datepicker) && new Date().getMonth() == getMonth(datepicker)) {
+                if (getDay(datepicker) === d && new Date().getFullYear() == getYear(datepicker) && new Date().getMonth() == getMonth(datepicker)) {
                     column.css('background-color', '#eeeeee');
                 }
 
@@ -184,14 +184,14 @@ function createDatepicker(callback) {
     const title = $(document.createElement('span'));
     header.append(title);
 
-    const nextMothButton = $(document.createElement('a'))
+    const nextMonthButton = $(document.createElement('a'))
         .attr('href', '/')
         .click(function (e) {
             e.stopPropagation();
             nextMonth($(this).parent().parent());
             return false;
         });
-    header.append(nextMothButton);
+    header.append(nextMonthButton);
 
     // set current date
     const today = new Date();
